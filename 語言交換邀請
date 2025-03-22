@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>語言交換邀請範例</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+    body {
+      background: #f5f5f5;
+      padding: 20px;
+    }
+    h1 {
+      margin-bottom: 20px;
+    }
+    .invitation-card {
+      background: #fff;
+      border-radius: 8px;
+      padding: 16px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      max-width: 400px;
+    }
+    .invitation-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    .invitation-title {
+      font-size: 1.1rem;
+      font-weight: bold;
+      color: #333;
+    }
+    .language-options {
+      display: flex;
+      gap: 8px;
+    }
+    .language-btn {
+      background: #eaeaea;
+      border: none;
+      padding: 4px 8px;
+      cursor: pointer;
+      border-radius: 4px;
+      font-size: 0.85rem;
+      transition: background 0.2s;
+    }
+    .language-btn:hover {
+      background: #ccc;
+    }
+    .invitation-details {
+      margin-bottom: 8px;
+      line-height: 1.6;
+    }
+    .invitation-details strong {
+      display: inline-block;
+      width: 70px;
+      color: #555;
+    }
+    .invitation-footer {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 12px;
+    }
+    .status {
+      font-weight: bold;
+      color: #b37b00;
+    }
+    .btn {
+      cursor: pointer;
+      padding: 8px 12px;
+      border-radius: 4px;
+      border: none;
+      transition: background 0.2s;
+    }
+    .btn-respond {
+      background: #06c;
+      color: #fff;
+    }
+    .btn-respond:hover {
+      background: #005bb5;
+    }
+    .btn-report {
+      background: #f44336;
+      color: #fff;
+    }
+    .btn-report:hover {
+      background: #d32f2f;
+    }
+    .modal-backdrop {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 999;
+      justify-content: center;
+      align-items: center;
+    }
+    .modal {
+      background: #fff;
+      border-radius: 8px;
+      padding: 16px;
+      width: 300px;
+      position: relative;
+    }
+    .modal h2 {
+      margin-bottom: 16px;
+    }
+    .close-btn {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      background: transparent;
+      border: none;
+      font-size: 1.2rem;
+      cursor: pointer;
+    }
+    .report-options {
+      margin-bottom: 16px;
+    }
+    .report-options label {
+      display: block;
+      margin-bottom: 8px;
+      cursor: pointer;
+    }
+    .report-submit {
+      background: #06c;
+      color: #fff;
+      margin-right: 8px;
+    }
+    .report-submit:hover {
+      background: #005bb5;
+    }
+    .report-cancel {
+      background: #ccc;
+      color: #333;
+    }
+    .report-cancel:hover {
+      background: #aaa;
+    }
+  </style>
+</head>
+<body>
+  <h1>語言交換邀請</h1>
+  <div class="invitation-card">
+    <div class="invitation-header">
+      <div class="invitation-title">你邀請了「關爺吃炸雞」</div>
+      <div class="language-options">
+        <button class="language-btn">英文</button>
+        <button class="language-btn">台語</button>
+      </div>
+    </div>
+    <div class="invitation-details">
+      <p><strong>邀請時間:</strong> 2025-02-28 22:47:06</p>
+      <p><strong>地點:</strong> 18 Rue Pasteur, 77500 Chelles, 法國</p>
+      <p><strong>介紹:</strong> 100</p>
+      <p><strong>時長:</strong> 100 分鐘</p>
+      <p><strong>費用:</strong> 100.00</p>
+    </div>
+    <div class="invitation-footer">
+      <div class="status">狀態: ⌛ 待回應</div>
+      <div>
+        <button class="btn btn-respond">回應</button>
+        <button class="btn btn-report" onclick="openReportModal()">檢舉</button>
+      </div>
+    </div>
+  </div>
+  <div class="modal-backdrop" id="modalBackdrop">
+    <div class="modal">
+      <button class="close-btn" onclick="closeReportModal()">✕</button>
+      <h2>檢舉原因</h2>
+      <div class="report-options">
+        <label><input type="radio" name="reportReason" value="notPublic"> 這個聚會不是在公共場所舉辦</label>
+        <label><input type="radio" name="reportReason" value="noShow"> 對方 No Show</label>
+        <label><input type="radio" name="reportReason" value="spam"> 邀請是垃圾訊息/廣告</label>
+      </div>
+      <div style="margin-bottom: 16px;">
+        <label for="reportComment">補充說明：</label>
+        <textarea id="reportComment" rows="3" style="width:100%;"></textarea>
+      </div>
+      <div>
+        <button class="btn report-submit" onclick="submitReport()">送出</button>
+        <button class="btn report-cancel" onclick="closeReportModal()">取消</button>
+      </div>
+    </div>
+  </div>
+  <script>
+    function openReportModal() {
+      document.getElementById('modalBackdrop').style.display = 'flex';
+    }
+    function closeReportModal() {
+      document.getElementById('modalBackdrop').style.display = 'none';
+    }
+    function submitReport() {
+      const reason = document.querySelector('input[name="reportReason"]:checked');
+      const comment = document.getElementById('reportComment').value.trim();
+      if (!reason) {
+        alert('請選擇檢舉原因');
+        return;
+      }
+      console.log('檢舉原因:', reason.value);
+      console.log('補充說明:', comment);
+      alert('檢舉已送出，感謝您的回饋！');
+      closeReportModal();
+      reason.checked = false;
+      document.getElementById('reportComment').value = '';
+    }
+  </script>
+</body>
+</html>
