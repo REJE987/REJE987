@@ -1,29 +1,51 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-Hant">
 <head>
   <meta charset="UTF-8" />
-  <title>語言交換邀請範例</title>
+  <title>語言交換邀請</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
   <style>
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: Arial, sans-serif;
+      font-family: 'Poppins', sans-serif;
     }
     body {
-      background: #f5f5f5;
+      background: linear-gradient(120deg, #e0f7fa 0%, #ffffff 100%);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
       padding: 20px;
     }
     h1 {
+      font-weight: 600;
+      font-size: 1.5rem;
       margin-bottom: 20px;
+      text-align: center;
+      color: #00897b;
     }
     .invitation-card {
-      background: #fff;
+      background: #ffffff;
       border-radius: 8px;
       padding: 16px;
-      margin-bottom: 20px;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      width: 100%;
       max-width: 400px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      position: relative;
+      overflow: hidden;
+    }
+    .card-header {
+      background: linear-gradient(45deg, #80cbc4, #4db6ac);
+      padding: 8px 12px;
+      border-radius: 6px 6px 0 0;
+      margin: -16px -16px 12px -16px;
+      color: #fff;
+      font-weight: 600;
+      font-size: 1rem;
     }
     .invitation-header {
       display: flex;
@@ -32,8 +54,8 @@
       margin-bottom: 12px;
     }
     .invitation-title {
-      font-size: 1.1rem;
-      font-weight: bold;
+      font-size: 1rem;
+      font-weight: 600;
       color: #333;
     }
     .language-options {
@@ -41,48 +63,59 @@
       gap: 8px;
     }
     .language-btn {
-      background: #eaeaea;
+      background: #e0f2f1;
       border: none;
       padding: 4px 8px;
       cursor: pointer;
       border-radius: 4px;
       font-size: 0.85rem;
-      transition: background 0.2s;
+      transition: background 0.2s, transform 0.2s;
     }
     .language-btn:hover {
-      background: #ccc;
+      background: #b2dfdb;
+      transform: translateY(-2px);
     }
     .invitation-details {
       margin-bottom: 8px;
       line-height: 1.6;
+      color: #333;
+      font-size: 0.95rem;
     }
     .invitation-details strong {
       display: inline-block;
       width: 70px;
       color: #555;
+      font-weight: 500;
     }
     .invitation-footer {
       display: flex;
       justify-content: space-between;
       margin-top: 12px;
+      color: #333;
     }
     .status {
-      font-weight: bold;
+      font-weight: 600;
       color: #b37b00;
+      font-size: 0.95rem;
     }
     .btn {
       cursor: pointer;
       padding: 8px 12px;
       border-radius: 4px;
       border: none;
-      transition: background 0.2s;
+      transition: background 0.2s, transform 0.2s;
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+    .btn:hover {
+      transform: translateY(-2px);
     }
     .btn-respond {
-      background: #06c;
+      background: #00897b;
       color: #fff;
     }
     .btn-respond:hover {
-      background: #005bb5;
+      background: #00796b;
     }
     .btn-report {
       background: #f44336;
@@ -102,6 +135,12 @@
       z-index: 999;
       justify-content: center;
       align-items: center;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .modal-backdrop.show {
+      display: flex;
+      opacity: 1;
     }
     .modal {
       background: #fff;
@@ -109,34 +148,48 @@
       padding: 16px;
       width: 300px;
       position: relative;
+      transform: scale(0.9);
+      transition: transform 0.3s ease;
+    }
+    .modal.show {
+      transform: scale(1);
     }
     .modal h2 {
-      margin-bottom: 16px;
+      margin: 0 0 16px 0;
+      font-size: 1rem;
+      color: #333;
+      font-weight: 600;
     }
     .close-btn {
       position: absolute;
-      top: 8px;
-      right: 8px;
+      top: 16px;
+      right: 16px;
       background: transparent;
       border: none;
       font-size: 1.2rem;
       cursor: pointer;
+      color: #999;
+    }
+    .close-btn:hover {
+      color: #333;
     }
     .report-options {
       margin-bottom: 16px;
+      color: #333;
     }
     .report-options label {
       display: block;
       margin-bottom: 8px;
       cursor: pointer;
+      font-size: 0.9rem;
     }
     .report-submit {
-      background: #06c;
+      background: #00897b;
       color: #fff;
       margin-right: 8px;
     }
     .report-submit:hover {
-      background: #005bb5;
+      background: #00796b;
     }
     .report-cancel {
       background: #ccc;
@@ -145,13 +198,45 @@
     .report-cancel:hover {
       background: #aaa;
     }
+    #reportContent {
+      display: block;
+    }
+    #successContent {
+      display: none;
+      text-align: center;
+    }
+    #successContent h2 {
+      color: #00897b;
+      margin-bottom: 10px;
+      font-weight: 600;
+    }
+    @media (max-width: 480px) {
+      h1 {
+        font-size: 1.2rem;
+      }
+      .invitation-card {
+        max-width: 90%;
+        padding: 16px;
+      }
+      .invitation-title {
+        font-size: 0.95rem;
+      }
+      .btn {
+        padding: 6px 10px;
+        font-size: 0.85rem;
+      }
+      .modal {
+        width: 80%;
+      }
+    }
   </style>
 </head>
 <body>
   <h1>語言交換邀請</h1>
   <div class="invitation-card">
+    <div class="card-header">你邀請了「關爺吃炸雞」</div>
     <div class="invitation-header">
-      <div class="invitation-title">你邀請了「關爺吃炸雞」</div>
+      <div class="invitation-title">關爺吃炸雞</div>
       <div class="language-options">
         <button class="language-btn">英文</button>
         <button class="language-btn">台語</button>
@@ -172,45 +257,64 @@
       </div>
     </div>
   </div>
+
   <div class="modal-backdrop" id="modalBackdrop">
-    <div class="modal">
+    <div class="modal" id="modalDialog">
       <button class="close-btn" onclick="closeReportModal()">✕</button>
-      <h2>檢舉原因</h2>
-      <div class="report-options">
-        <label><input type="radio" name="reportReason" value="notPublic"> 這個聚會不是在公共場所舉辦</label>
-        <label><input type="radio" name="reportReason" value="noShow"> 對方 No Show</label>
-        <label><input type="radio" name="reportReason" value="spam"> 邀請是垃圾訊息/廣告</label>
+      <div id="reportContent">
+        <h2>檢舉原因</h2>
+        <div class="report-options">
+          <label><input type="radio" name="reportReason" value="notPublic"> 這個聚會不是在公共場所舉辦</label>
+          <label><input type="radio" name="reportReason" value="noShow"> 對方 No Show</label>
+          <label><input type="radio" name="reportReason" value="spam"> 邀請是垃圾訊息/廣告</label>
+        </div>
+        <div style="margin-bottom: 16px;">
+          <label for="reportComment">補充說明：</label>
+          <textarea id="reportComment" rows="3" style="width:100%;"></textarea>
+        </div>
+        <div>
+          <button class="btn report-submit" onclick="submitReport()">送出</button>
+          <button class="btn report-cancel" onclick="closeReportModal()">取消</button>
+        </div>
       </div>
-      <div style="margin-bottom: 16px;">
-        <label for="reportComment">補充說明：</label>
-        <textarea id="reportComment" rows="3" style="width:100%;"></textarea>
-      </div>
-      <div>
-        <button class="btn report-submit" onclick="submitReport()">送出</button>
-        <button class="btn report-cancel" onclick="closeReportModal()">取消</button>
+      <div id="successContent">
+        <h2>檢舉已送出</h2>
+        <p>感謝您的回饋！</p>
+        <button class="btn" onclick="closeReportModal()">關閉</button>
       </div>
     </div>
   </div>
+
   <script>
     function openReportModal() {
-      document.getElementById('modalBackdrop').style.display = 'flex';
+      const backdrop = document.getElementById('modalBackdrop');
+      const modal = document.getElementById('modalDialog');
+      backdrop.classList.add('show');
+      setTimeout(() => {
+        modal.classList.add('show');
+      }, 10);
     }
     function closeReportModal() {
-      document.getElementById('modalBackdrop').style.display = 'none';
+      const backdrop = document.getElementById('modalBackdrop');
+      const modal = document.getElementById('modalDialog');
+      modal.classList.remove('show');
+      setTimeout(() => {
+        backdrop.classList.remove('show');
+      }, 300);
+      document.getElementById('reportContent').style.display = 'block';
+      document.getElementById('successContent').style.display = 'none';
+      const checkedRadio = document.querySelector('input[name="reportReason"]:checked');
+      if (checkedRadio) checkedRadio.checked = false;
+      document.getElementById('reportComment').value = '';
     }
     function submitReport() {
       const reason = document.querySelector('input[name="reportReason"]:checked');
       const comment = document.getElementById('reportComment').value.trim();
-      if (!reason) {
-        alert('請選擇檢舉原因');
-        return;
-      }
+      if (!reason) return;
       console.log('檢舉原因:', reason.value);
       console.log('補充說明:', comment);
-      alert('檢舉已送出，感謝您的回饋！');
-      closeReportModal();
-      reason.checked = false;
-      document.getElementById('reportComment').value = '';
+      document.getElementById('reportContent').style.display = 'none';
+      document.getElementById('successContent').style.display = 'block';
     }
   </script>
 </body>
